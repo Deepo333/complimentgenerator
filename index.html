@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliment Generator</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #8fd3f4, #84fab0);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    padding: 20px;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 40px 32px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #ff6b6b, #f06595, #cc5de8, #845ef7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle {
+    margin: 0 0 28px;
+    color: #666;
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, #ff6b6b, #f06595, #cc5de8);
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(240, 101, 149, 0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  button:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 20px rgba(240, 101, 149, 0.5);
+  }
+
+  button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  #compliment {
+    margin-top: 28px;
+    min-height: 60px;
+    font-size: 1.4rem;
+    color: #4a2c6d;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #compliment.show {
+    opacity: 1;
+  }
+
+  .emoji {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Compliment Generator</h1>
+    <p class="subtitle">Tap the button for a little sunshine ☀️</p>
+    <button id="giveBtn">Give me a compliment</button>
+    <div id="compliment"></div>
+  </div>
+
+<script>
+  const compliments = [
+    "You light up every room you walk into.",
+    "Your kindness makes the world a better place.",
+    "You're capable of amazing things.",
+    "You have the best laugh — it's contagious!",
+    "You make hard things look easy.",
+    "Your creativity knows no bounds.",
+    "You're a great listener, and people notice.",
+    "Your smile could brighten the darkest day.",
+    "You bring out the best in people around you.",
+    "You're stronger than you know.",
+    "Your hard work never goes unnoticed.",
+    "You have a heart of gold.",
+    "You're doing better than you think you are.",
+    "Your presence is a gift to those around you.",
+    "You have impeccable taste!",
+    "You're one of a kind, and that's your superpower."
+  ];
+
+  const emojis = ["✨", "🌟", "💖", "🌈", "🎉", "🌻", "💫", "🥳"];
+
+  const btn = document.getElementById("giveBtn");
+  const display = document.getElementById("compliment");
+  let lastIndex = -1;
+
+  btn.addEventListener("click", () => {
+    let index;
+    do {
+      index = Math.floor(Math.random() * compliments.length);
+    } while (index === lastIndex && compliments.length > 1);
+    lastIndex = index;
+
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+    display.classList.remove("show");
+    setTimeout(() => {
+      display.innerHTML = `<span class="emoji">${emoji}</span>${compliments[index]}`;
+      display.classList.add("show");
+    }, 150);
+  });
+</script>
+</body>
+</html>
