@@ -32,7 +32,7 @@
     background: rgba(255, 255, 255, 0.9);
     border-radius: 24px;
     padding: 40px 32px;
-    max-width: 480px;
+    max-width: 520px;
     width: 100%;
     text-align: center;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -53,29 +53,61 @@
     font-size: 1rem;
   }
 
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+  }
+
   button {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(90deg, #ff6b6b, #f06595, #cc5de8);
     border: none;
     border-radius: 50px;
-    padding: 16px 32px;
+    padding: 16px 24px;
     cursor: pointer;
-    box-shadow: 0 8px 16px rgba(240, 101, 149, 0.4);
+    flex: 1 1 140px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
   button:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 20px rgba(240, 101, 149, 0.5);
   }
 
   button:active {
     transform: translateY(0) scale(0.98);
   }
 
-  #compliment {
+  #everydayBtn {
+    background: linear-gradient(90deg, #ff6b6b, #f06595);
+    box-shadow: 0 8px 16px rgba(240, 101, 149, 0.4);
+  }
+
+  #everydayBtn:hover {
+    box-shadow: 0 12px 20px rgba(240, 101, 149, 0.5);
+  }
+
+  #motivationalBtn {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.4);
+  }
+
+  #motivationalBtn:hover {
+    box-shadow: 0 12px 20px rgba(79, 172, 254, 0.5);
+  }
+
+  #challengeBtn {
+    background: linear-gradient(90deg, #43e97b, #38f9d7);
+    box-shadow: 0 8px 16px rgba(67, 233, 123, 0.4);
+  }
+
+  #challengeBtn:hover {
+    box-shadow: 0 12px 20px rgba(67, 233, 123, 0.5);
+  }
+
+  #message {
     margin-top: 28px;
     min-height: 60px;
     font-size: 1.4rem;
@@ -85,7 +117,7 @@
     transition: opacity 0.4s ease;
   }
 
-  #compliment.show {
+  #message.show {
     opacity: 1;
   }
 
@@ -99,52 +131,104 @@
 <body>
   <div class="card">
     <h1>Compliment Generator</h1>
-    <p class="subtitle">Tap the button for a little sunshine ☀️</p>
-    <button id="giveBtn">Give me a compliment</button>
-    <div id="compliment"></div>
+    <p class="subtitle">Tap a button for a little sunshine ☀️</p>
+    <div class="button-row">
+      <button id="everydayBtn">Everyday compliment</button>
+      <button id="motivationalBtn">Motivational</button>
+      <button id="challengeBtn">Daily challenge</button>
+    </div>
+    <div id="message"></div>
   </div>
 
 <script>
-  const compliments = [
-    "You light up every room you walk into.",
-    "Your kindness makes the world a better place.",
-    "You're capable of amazing things.",
-    "You have the best laugh — it's contagious!",
-    "You make hard things look easy.",
-    "Your creativity knows no bounds.",
-    "You're a great listener, and people notice.",
-    "Your smile could brighten the darkest day.",
-    "You bring out the best in people around you.",
-    "You're stronger than you know.",
-    "Your hard work never goes unnoticed.",
-    "You have a heart of gold.",
-    "You're doing better than you think you are.",
-    "Your presence is a gift to those around you.",
-    "You have impeccable taste!",
-    "You're one of a kind, and that's your superpower."
-  ];
+  const categories = {
+    everyday: {
+      emojis: ["✨", "🌟", "💖", "🌈", "🎉", "🌻", "💫", "🥳"],
+      messages: [
+        "You light up every room you walk into.",
+        "Your kindness makes the world a better place.",
+        "You're capable of amazing things.",
+        "You have the best laugh — it's contagious!",
+        "You make hard things look easy.",
+        "Your creativity knows no bounds.",
+        "You're a great listener, and people notice.",
+        "Your smile could brighten the darkest day.",
+        "You bring out the best in people around you.",
+        "You're stronger than you know.",
+        "Your hard work never goes unnoticed.",
+        "You have a heart of gold.",
+        "You're doing better than you think you are.",
+        "Your presence is a gift to those around you.",
+        "You have impeccable taste!",
+        "You're one of a kind, and that's your superpower."
+      ]
+    },
+    motivational: {
+      emojis: ["🔥", "🚀", "💪", "⚡", "🏆", "🌅", "🧭", "📈"],
+      messages: [
+        "Every step forward counts, no matter how small.",
+        "You have everything you need to figure this out.",
+        "Progress, not perfection, is the goal.",
+        "Your effort today is building your tomorrow.",
+        "Obstacles are just proof you're pushing your limits.",
+        "You've overcome hard things before — you can do it again.",
+        "Believe in the process; the results will follow.",
+        "You're closer to your goal than you were yesterday.",
+        "Great things take time, and you're already on your way.",
+        "Your potential is far bigger than any setback.",
+        "Keep going — the breakthrough is closer than it feels.",
+        "You are the author of your own comeback story.",
+        "Small consistent actions lead to big changes.",
+        "You don't have to be perfect, just persistent.",
+        "This is your moment to show up for yourself.",
+        "You have the courage to turn dreams into plans."
+      ]
+    },
+    challenge: {
+      emojis: ["🌱", "🎯", "🧘", "🤝", "📓", "🏃", "🌤️", "💡"],
+      messages: [
+        "Today is a great day to push yourself in your workout.",
+        "Today is a great day to show generosity to someone.",
+        "Today is a great day to reflect on an area you'd like to grow in.",
+        "Today is a great day to reach out to someone you haven't talked to in a while.",
+        "Today is a great day to try something that scares you a little.",
+        "Today is a great day to declutter one small space around you.",
+        "Today is a great day to write down three things you're grateful for.",
+        "Today is a great day to give someone a genuine compliment.",
+        "Today is a great day to learn one new thing.",
+        "Today is a great day to take a walk without your phone.",
+        "Today is a great day to forgive yourself for a small mistake.",
+        "Today is a great day to say no to something that drains you.",
+        "Today is a great day to plan one step toward a big goal.",
+        "Today is a great day to unplug for an hour and just breathe.",
+        "Today is a great day to tell someone why you appreciate them."
+      ]
+    }
+  };
 
-  const emojis = ["✨", "🌟", "💖", "🌈", "🎉", "🌻", "💫", "🥳"];
+  const display = document.getElementById("message");
+  const lastIndexByCategory = {};
 
-  const btn = document.getElementById("giveBtn");
-  const display = document.getElementById("compliment");
-  let lastIndex = -1;
-
-  btn.addEventListener("click", () => {
+  function showMessage(categoryKey) {
+    const category = categories[categoryKey];
     let index;
     do {
-      index = Math.floor(Math.random() * compliments.length);
-    } while (index === lastIndex && compliments.length > 1);
-    lastIndex = index;
+      index = Math.floor(Math.random() * category.messages.length);
+    } while (index === lastIndexByCategory[categoryKey] && category.messages.length > 1);
+    lastIndexByCategory[categoryKey] = index;
 
-    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    const emoji = category.emojis[Math.floor(Math.random() * category.emojis.length)];
 
     display.classList.remove("show");
     setTimeout(() => {
-      display.innerHTML = `<span class="emoji">${emoji}</span>${compliments[index]}`;
+      display.innerHTML = `<span class="emoji">${emoji}</span>${category.messages[index]}`;
       display.classList.add("show");
     }, 150);
-  });
+  }
+
+  document.getElementById("everydayBtn").addEventListener("click", () => showMessage("everyday"));
+  document.getElementById("motivationalBtn").addEventListener("click", () => showMessage("motivational"));
+  document.getElementById("challengeBtn").addEventListener("click", () => showMessage("challenge"));
 </script>
 </body>
 </html>
