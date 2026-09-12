@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Compliment Generator</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f06595">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Compliments">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+
 <style>
   * {
     box-sizing: border-box;
@@ -29,88 +39,126 @@
   }
 
   .card {
-    background: rgba(255, 255, 255, 0.9);
+    position: relative;
+    background: rgba(255, 255, 255, 0.92);
     border-radius: 24px;
-    padding: 40px 32px;
+    padding: 44px 28px 32px;
     max-width: 520px;
     width: 100%;
     text-align: center;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
 
-  h1 {
-    margin: 0 0 8px;
-    font-size: 2.2rem;
+  .personalize-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(240, 101, 149, 0.12);
+    color: #cc5de8;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .personalize-btn:hover {
+    background: rgba(240, 101, 149, 0.22);
+  }
+
+  h1.slogan {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    line-height: 1.25;
     background: linear-gradient(90deg, #ff6b6b, #f06595, #cc5de8, #845ef7);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  .subtitle {
-    margin: 0 0 28px;
+  .subline {
+    margin: 0 0 22px;
     color: #666;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
-  .button-row {
+  .quote-box {
+    min-height: 54px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
+    align-items: center;
     justify-content: center;
+    padding: 0 8px;
+    margin-bottom: 24px;
+  }
+
+  .quote {
+    margin: 0;
+    font-style: italic;
+    font-size: 1rem;
+    color: #7952b3;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .quote.show {
+    opacity: 1;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
   button {
-    font-size: 1.05rem;
+    font-family: inherit;
+  }
+
+  .cat-btn {
+    font-size: 0.98rem;
     font-weight: bold;
     color: white;
     border: none;
     border-radius: 50px;
-    padding: 16px 24px;
+    padding: 15px 12px;
     cursor: pointer;
-    flex: 1 1 140px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
-  button:hover {
+  .cat-btn:hover {
     transform: translateY(-2px) scale(1.03);
   }
 
-  button:active {
+  .cat-btn:active {
     transform: translateY(0) scale(0.98);
   }
 
-  #everydayBtn {
+  .cat-everyday {
     background: linear-gradient(90deg, #ff6b6b, #f06595);
     box-shadow: 0 8px 16px rgba(240, 101, 149, 0.4);
   }
 
-  #everydayBtn:hover {
-    box-shadow: 0 12px 20px rgba(240, 101, 149, 0.5);
-  }
-
-  #motivationalBtn {
+  .cat-motivational {
     background: linear-gradient(90deg, #4facfe, #00f2fe);
     box-shadow: 0 8px 16px rgba(79, 172, 254, 0.4);
   }
 
-  #motivationalBtn:hover {
-    box-shadow: 0 12px 20px rgba(79, 172, 254, 0.5);
-  }
-
-  #challengeBtn {
+  .cat-challenge {
     background: linear-gradient(90deg, #43e97b, #38f9d7);
     box-shadow: 0 8px 16px rgba(67, 233, 123, 0.4);
   }
 
-  #challengeBtn:hover {
-    box-shadow: 0 12px 20px rgba(67, 233, 123, 0.5);
+  .cat-spiritual {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    box-shadow: 0 8px 16px rgba(247, 151, 30, 0.4);
   }
 
   #message {
-    margin-top: 28px;
+    margin-top: 26px;
     min-height: 60px;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #4a2c6d;
     font-weight: 600;
     opacity: 0;
@@ -126,109 +174,653 @@
     display: block;
     margin-bottom: 8px;
   }
+
+  .personalized-note {
+    margin: 10px 0 0;
+    font-size: 0.8rem;
+    color: #a18cd1;
+    font-weight: bold;
+  }
+
+  .share-btn {
+    margin-top: 16px;
+    background: white;
+    color: #cc5de8;
+    border: 2px solid #cc5de8;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .share-btn:hover {
+    background: #cc5de8;
+    color: white;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(20px);
+    background: #4a2c6d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 50;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(74, 44, 109, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+  }
+
+  .overlay[hidden] {
+    display: none;
+  }
+
+  .modal {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 30px 24px 24px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    text-align: left;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  .modal h2 {
+    margin: 0 0 6px;
+    font-size: 1.3rem;
+    color: #4a2c6d;
+    text-align: center;
+  }
+
+  .modal-sub {
+    margin: 0 0 20px;
+    font-size: 0.85rem;
+    color: #777;
+    text-align: center;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+
+  legend {
+    font-weight: bold;
+    color: #4a2c6d;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    padding: 0;
+  }
+
+  .option-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    font-size: 0.92rem;
+    color: #333;
+  }
+
+  .option-row label {
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .option-row input[type="radio"] {
+    accent-color: #cc5de8;
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+
+  .other-text {
+    width: 100%;
+    margin-top: 6px;
+    margin-left: 25px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    max-width: calc(100% - 25px);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .save-btn {
+    flex: 1;
+    background: linear-gradient(90deg, #ff6b6b, #f06595, #cc5de8);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 13px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .clear-btn {
+    background: none;
+    border: 1px solid #ccc;
+    color: #888;
+    border-radius: 50px;
+    padding: 13px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 420px) {
+    .button-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 </head>
 <body>
   <div class="card">
-    <h1>Compliment Generator</h1>
-    <p class="subtitle">Tap a button for a little sunshine ☀️</p>
-    <div class="button-row">
-      <button id="everydayBtn">Everyday compliment</button>
-      <button id="motivationalBtn">Motivational</button>
-      <button id="challengeBtn">Daily challenge</button>
+    <button id="personalizeBtn" class="personalize-btn" type="button">✨ Personalize</button>
+    <h1 class="slogan">Fuel for the person you're becoming</h1>
+    <p class="subline">Encouragement, tailored to you.</p>
+
+    <div class="quote-box">
+      <p id="quoteText" class="quote"></p>
     </div>
+
+    <div class="button-grid">
+      <button id="everydayBtn" class="cat-btn cat-everyday" type="button">Everyday compliment</button>
+      <button id="motivationalBtn" class="cat-btn cat-motivational" type="button">Motivational</button>
+      <button id="challengeBtn" class="cat-btn cat-challenge" type="button">Daily challenge</button>
+      <button id="spiritualBtn" class="cat-btn cat-spiritual" type="button">Spiritual</button>
+    </div>
+
     <div id="message"></div>
+    <p id="personalizedNote" class="personalized-note" hidden>✨ Tailored to your profile</p>
+    <button id="shareBtn" class="share-btn" type="button" hidden>📤 Share this message</button>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="profileOverlay" class="overlay" hidden>
+    <div class="modal">
+      <button id="closeProfileBtn" class="close-btn" type="button" aria-label="Close">✕</button>
+      <h2>Personalize your encouragement</h2>
+      <p class="modal-sub">Optional — answer as many or as few as you like. Everything still works without it.</p>
+      <form id="profileForm"></form>
+      <div class="modal-actions">
+        <button id="saveProfileBtn" class="save-btn" type="submit" form="profileForm">Save profile</button>
+        <button id="clearProfileBtn" class="clear-btn" type="button">Clear</button>
+      </div>
+    </div>
   </div>
 
 <script>
+  // ---------- Data ----------
+
+  const quotes = [
+    "Small steps still move you forward.",
+    "You are enough, just as you are today.",
+    "Growth begins the moment you decide to try.",
+    "Kindness is a strength, not a weakness.",
+    "Your story is still being written.",
+    "Every sunrise is a chance to begin again.",
+    "Courage is quiet more often than loud.",
+    "You don't have to see the whole staircase to take the first step.",
+    "What you water will grow.",
+    "Rest is part of the journey, not a detour from it.",
+    "You're allowed to be a work in progress and worthy of love.",
+    "The best view comes after the hardest climb.",
+    "Your pace is valid, even if it's slow.",
+    "Hope is a quiet kind of courage.",
+    "Be gentle with yourself; you're doing the best you can.",
+    "A calm mind can carry a heavy load.",
+    "Today's effort is tomorrow's strength."
+  ];
+
+  const questions = [
+    {
+      id: "improve",
+      label: "What would you like to improve?",
+      options: [
+        { text: "Mental wellbeing", tag: "mental-wellbeing" },
+        { text: "Physical health", tag: "physical-health" },
+        { text: "Relationships", tag: "relationships" },
+        { text: "Confidence", tag: "confidence" },
+        { text: "Spiritual growth", tag: "spiritual-growth" }
+      ]
+    },
+    {
+      id: "motivation",
+      label: "What kind of encouragement motivates you most?",
+      options: [
+        { text: "Gentle reminders", tag: "gentle" },
+        { text: "Celebrating small wins", tag: "celebrate" },
+        { text: "Tough love", tag: "tough-love" },
+        { text: "Uplifting affirmations", tag: "affirmations" }
+      ]
+    },
+    {
+      id: "inspiration",
+      label: "What inspires you most?",
+      options: [
+        { text: "Nature", tag: "nature" },
+        { text: "Faith", tag: "faith" },
+        { text: "Personal growth", tag: "personal-growth" },
+        { text: "Music", tag: "music" }
+      ]
+    }
+  ];
+
   const categories = {
     everyday: {
       emojis: ["✨", "🌟", "💖", "🌈", "🎉", "🌻", "💫", "🥳"],
       messages: [
-        "You light up every room you walk into.",
-        "Your kindness makes the world a better place.",
-        "You're capable of amazing things.",
-        "You have the best laugh — it's contagious!",
-        "You make hard things look easy.",
-        "Your creativity knows no bounds.",
-        "You're a great listener, and people notice.",
-        "Your smile could brighten the darkest day.",
-        "You bring out the best in people around you.",
-        "You're stronger than you know.",
-        "Your hard work never goes unnoticed.",
-        "You have a heart of gold.",
-        "You're doing better than you think you are.",
-        "Your presence is a gift to those around you.",
-        "You have impeccable taste!",
-        "You're one of a kind, and that's your superpower."
+        { text: "You light up every room you walk into.", tags: ["confidence", "relationships"] },
+        { text: "Your kindness makes the world a better place.", tags: ["relationships", "gentle"] },
+        { text: "You're capable of amazing things.", tags: ["confidence", "celebrate"] },
+        { text: "You have the best laugh — it's contagious!", tags: ["relationships"] },
+        { text: "You make hard things look easy.", tags: ["confidence", "celebrate"] },
+        { text: "Your creativity knows no bounds.", tags: ["personal-growth", "confidence"] },
+        { text: "You're a great listener, and people notice.", tags: ["relationships", "gentle"] },
+        { text: "Your smile could brighten the darkest day.", tags: ["relationships", "gentle"] },
+        { text: "You bring out the best in people around you.", tags: ["relationships"] },
+        { text: "You're stronger than you know.", tags: ["confidence", "tough-love"] },
+        { text: "Your hard work never goes unnoticed.", tags: ["celebrate", "confidence"] },
+        { text: "You have a heart of gold.", tags: ["relationships", "gentle"] },
+        { text: "You're doing better than you think you are.", tags: ["gentle", "mental-wellbeing"] },
+        { text: "Your presence is a gift to those around you.", tags: ["relationships"] },
+        { text: "You have impeccable taste!", tags: ["confidence"] },
+        { text: "You're one of a kind, and that's your superpower.", tags: ["confidence", "celebrate"] }
       ]
     },
     motivational: {
       emojis: ["🔥", "🚀", "💪", "⚡", "🏆", "🌅", "🧭", "📈"],
       messages: [
-        "Every step forward counts, no matter how small.",
-        "You have everything you need to figure this out.",
-        "Progress, not perfection, is the goal.",
-        "Your effort today is building your tomorrow.",
-        "Obstacles are just proof you're pushing your limits.",
-        "You've overcome hard things before — you can do it again.",
-        "Believe in the process; the results will follow.",
-        "You're closer to your goal than you were yesterday.",
-        "Great things take time, and you're already on your way.",
-        "Your potential is far bigger than any setback.",
-        "Keep going — the breakthrough is closer than it feels.",
-        "You are the author of your own comeback story.",
-        "Small consistent actions lead to big changes.",
-        "You don't have to be perfect, just persistent.",
-        "This is your moment to show up for yourself.",
-        "You have the courage to turn dreams into plans."
+        { text: "Every step forward counts, no matter how small.", tags: ["gentle", "personal-growth"] },
+        { text: "You have everything you need to figure this out.", tags: ["confidence", "affirmations"] },
+        { text: "Progress, not perfection, is the goal.", tags: ["gentle", "personal-growth"] },
+        { text: "Your effort today is building your tomorrow.", tags: ["personal-growth", "celebrate"] },
+        { text: "Obstacles are just proof you're pushing your limits.", tags: ["tough-love", "personal-growth"] },
+        { text: "You've overcome hard things before — you can do it again.", tags: ["tough-love", "confidence"] },
+        { text: "Believe in the process; the results will follow.", tags: ["affirmations", "personal-growth"] },
+        { text: "You're closer to your goal than you were yesterday.", tags: ["celebrate", "personal-growth"] },
+        { text: "Great things take time, and you're already on your way.", tags: ["gentle", "personal-growth"] },
+        { text: "Your potential is far bigger than any setback.", tags: ["affirmations", "confidence"] },
+        { text: "Keep going — the breakthrough is closer than it feels.", tags: ["tough-love", "personal-growth"] },
+        { text: "You are the author of your own comeback story.", tags: ["affirmations", "confidence"] },
+        { text: "Small consistent actions lead to big changes.", tags: ["personal-growth", "physical-health"] },
+        { text: "You don't have to be perfect, just persistent.", tags: ["gentle", "tough-love"] },
+        { text: "This is your moment to show up for yourself.", tags: ["confidence", "affirmations"] },
+        { text: "You have the courage to turn dreams into plans.", tags: ["confidence", "personal-growth"] }
       ]
     },
     challenge: {
       emojis: ["🌱", "🎯", "🧘", "🤝", "📓", "🏃", "🌤️", "💡"],
       messages: [
-        "Today is a great day to push yourself in your workout.",
-        "Today is a great day to show generosity to someone.",
-        "Today is a great day to reflect on an area you'd like to grow in.",
-        "Today is a great day to reach out to someone you haven't talked to in a while.",
-        "Today is a great day to try something that scares you a little.",
-        "Today is a great day to declutter one small space around you.",
-        "Today is a great day to write down three things you're grateful for.",
-        "Today is a great day to give someone a genuine compliment.",
-        "Today is a great day to learn one new thing.",
-        "Today is a great day to take a walk without your phone.",
-        "Today is a great day to forgive yourself for a small mistake.",
-        "Today is a great day to say no to something that drains you.",
-        "Today is a great day to plan one step toward a big goal.",
-        "Today is a great day to unplug for an hour and just breathe.",
-        "Today is a great day to tell someone why you appreciate them."
+        { text: "Today is a great day to push yourself in your workout.", tags: ["physical-health"] },
+        { text: "Today is a great day to show generosity to someone.", tags: ["relationships"] },
+        { text: "Today is a great day to reflect on an area you'd like to grow in.", tags: ["personal-growth", "mental-wellbeing"] },
+        { text: "Today is a great day to reach out to someone you haven't talked to in a while.", tags: ["relationships"] },
+        { text: "Today is a great day to try something that scares you a little.", tags: ["confidence", "personal-growth"] },
+        { text: "Today is a great day to declutter one small space around you.", tags: ["mental-wellbeing"] },
+        { text: "Today is a great day to write down three things you're grateful for.", tags: ["mental-wellbeing", "gentle"] },
+        { text: "Today is a great day to give someone a genuine compliment.", tags: ["relationships"] },
+        { text: "Today is a great day to learn one new thing.", tags: ["personal-growth"] },
+        { text: "Today is a great day to take a walk without your phone.", tags: ["physical-health", "nature", "mental-wellbeing"] },
+        { text: "Today is a great day to forgive yourself for a small mistake.", tags: ["mental-wellbeing", "gentle"] },
+        { text: "Today is a great day to say no to something that drains you.", tags: ["confidence", "mental-wellbeing"] },
+        { text: "Today is a great day to plan one step toward a big goal.", tags: ["personal-growth"] },
+        { text: "Today is a great day to unplug for an hour and just breathe.", tags: ["mental-wellbeing"] },
+        { text: "Today is a great day to tell someone why you appreciate them.", tags: ["relationships"] }
+      ]
+    },
+    spiritual: {
+      emojis: ["🕊️", "🌙", "🙏", "🌤️", "🌿", "⛅", "💫", "🔆"],
+      messages: [
+        { text: "You are held by something bigger than today's worries.", tags: ["faith", "gentle"] },
+        { text: "There is quiet strength in trusting the journey you're on.", tags: ["faith", "spiritual-growth"] },
+        { text: "Peace can meet you right where you are.", tags: ["gentle", "spiritual-growth"] },
+        { text: "Your spirit is growing, even on the quiet days.", tags: ["spiritual-growth"] },
+        { text: "Gratitude opens the door to grace.", tags: ["spiritual-growth", "gentle"] },
+        { text: "You are exactly where you need to be to keep growing.", tags: ["spiritual-growth", "faith"] },
+        { text: "Stillness has something to teach you today.", tags: ["spiritual-growth"] },
+        { text: "You are loved beyond what you can measure.", tags: ["faith", "gentle"] },
+        { text: "Every breath is a quiet invitation to begin again.", tags: ["spiritual-growth"] },
+        { text: "Faith doesn't require certainty, just a willing heart.", tags: ["faith"] },
+        { text: "You carry a light that the world needs.", tags: ["spiritual-growth", "confidence"] },
+        { text: "Let today be a small act of trust.", tags: ["faith", "gentle"] },
+        { text: "Your soul knows how to find its way home.", tags: ["spiritual-growth"] },
+        { text: "There is meaning in this season, even the hard parts.", tags: ["faith", "spiritual-growth"] },
+        { text: "You are never walking this path alone.", tags: ["faith", "gentle"] }
       ]
     }
   };
 
+  // ---------- Rotating quote ----------
+
+  const quoteEl = document.getElementById("quoteText");
+  let lastQuoteIndex = -1;
+
+  function pickQuoteIndex() {
+    let index;
+    do {
+      index = Math.floor(Math.random() * quotes.length);
+    } while (index === lastQuoteIndex && quotes.length > 1);
+    lastQuoteIndex = index;
+    return index;
+  }
+
+  function rotateQuote() {
+    quoteEl.classList.remove("show");
+    setTimeout(() => {
+      quoteEl.textContent = quotes[pickQuoteIndex()];
+      quoteEl.classList.add("show");
+    }, 400);
+  }
+
+  rotateQuote();
+  setInterval(rotateQuote, 12000);
+
+  // ---------- Profile (optional, stored on-device) ----------
+
+  const PROFILE_KEY = "complimentGeneratorProfile";
+
+  function loadProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveProfile(profile) {
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    } catch (e) {
+      // localStorage unavailable — profile just won't persist
+    }
+  }
+
+  function clearProfileStorage() {
+    try {
+      localStorage.removeItem(PROFILE_KEY);
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  let profile = loadProfile();
+
+  const personalizeBtn = document.getElementById("personalizeBtn");
+
+  function updatePersonalizeBtnLabel() {
+    personalizeBtn.textContent = profile ? "✨ Edit profile" : "✨ Personalize";
+  }
+  updatePersonalizeBtnLabel();
+
+  function profileTags() {
+    if (!profile) return new Set();
+    const tags = [];
+    questions.forEach(q => {
+      const answer = profile[q.id];
+      if (answer && answer.tag) tags.push(answer.tag);
+    });
+    return new Set(tags);
+  }
+
+  // ---------- Profile modal ----------
+
+  const profileOverlay = document.getElementById("profileOverlay");
+  const profileForm = document.getElementById("profileForm");
+
+  function buildProfileForm() {
+    profileForm.innerHTML = "";
+    questions.forEach(q => {
+      const fieldset = document.createElement("fieldset");
+      const legend = document.createElement("legend");
+      legend.textContent = q.label;
+      fieldset.appendChild(legend);
+
+      const savedAnswer = profile && profile[q.id] ? profile[q.id] : null;
+
+      q.options.forEach((opt, i) => {
+        const row = document.createElement("div");
+        row.className = "option-row";
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = q.id;
+        input.id = `${q.id}-${i}`;
+        input.value = opt.text;
+        input.dataset.tag = opt.tag;
+        if (savedAnswer && savedAnswer.value === opt.text) input.checked = true;
+
+        const label = document.createElement("label");
+        label.htmlFor = input.id;
+        label.textContent = opt.text;
+
+        row.appendChild(input);
+        row.appendChild(label);
+        fieldset.appendChild(row);
+      });
+
+      // "Other" option with write-in box
+      const otherRow = document.createElement("div");
+      otherRow.className = "option-row";
+
+      const otherInput = document.createElement("input");
+      otherInput.type = "radio";
+      otherInput.name = q.id;
+      otherInput.id = `${q.id}-other`;
+      otherInput.value = "Other";
+
+      const otherLabel = document.createElement("label");
+      otherLabel.htmlFor = otherInput.id;
+      otherLabel.textContent = "Other";
+
+      otherRow.appendChild(otherInput);
+      otherRow.appendChild(otherLabel);
+      fieldset.appendChild(otherRow);
+
+      const otherText = document.createElement("input");
+      otherText.type = "text";
+      otherText.className = "other-text";
+      otherText.placeholder = "Write in your own answer";
+      otherText.id = `${q.id}-other-text`;
+
+      const isOtherSaved = savedAnswer && savedAnswer.value === "other";
+      if (isOtherSaved) {
+        otherInput.checked = true;
+        otherText.value = savedAnswer.customText || "";
+      }
+
+      fieldset.appendChild(otherText);
+      profileForm.appendChild(fieldset);
+    });
+  }
+
+  function openProfileModal() {
+    buildProfileForm();
+    profileOverlay.hidden = false;
+  }
+
+  function closeProfileModal() {
+    profileOverlay.hidden = true;
+  }
+
+  personalizeBtn.addEventListener("click", openProfileModal);
+  document.getElementById("closeProfileBtn").addEventListener("click", closeProfileModal);
+  profileOverlay.addEventListener("click", (e) => {
+    if (e.target === profileOverlay) closeProfileModal();
+  });
+
+  profileForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const newProfile = {};
+    questions.forEach(q => {
+      const checked = profileForm.querySelector(`input[name="${q.id}"]:checked`);
+      if (!checked) return;
+      if (checked.value === "Other") {
+        const customText = document.getElementById(`${q.id}-other-text`).value.trim();
+        if (customText) {
+          newProfile[q.id] = { value: "other", tag: null, customText };
+        }
+      } else {
+        newProfile[q.id] = { value: checked.value, tag: checked.dataset.tag };
+      }
+    });
+    profile = Object.keys(newProfile).length ? newProfile : null;
+    if (profile) {
+      saveProfile(profile);
+      showToast("Profile saved — your messages will be tailored to you 💜");
+    } else {
+      clearProfileStorage();
+      showToast("No answers saved — you're all set to use the app as-is");
+    }
+    updatePersonalizeBtnLabel();
+    closeProfileModal();
+  });
+
+  document.getElementById("clearProfileBtn").addEventListener("click", () => {
+    profile = null;
+    clearProfileStorage();
+    updatePersonalizeBtnLabel();
+    buildProfileForm();
+    showToast("Profile cleared");
+  });
+
+  // ---------- Toast ----------
+
+  const toastEl = document.getElementById("toast");
+  let toastTimer = null;
+
+  function showToast(text) {
+    toastEl.textContent = text;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2600);
+  }
+
+  // ---------- Messages ----------
+
   const display = document.getElementById("message");
+  const personalizedNote = document.getElementById("personalizedNote");
+  const shareBtn = document.getElementById("shareBtn");
   const lastIndexByCategory = {};
+  let currentMessageText = "";
 
   function showMessage(categoryKey) {
     const category = categories[categoryKey];
+    const tags = profileTags();
+    const personalizedPool = tags.size
+      ? category.messages.filter(m => m.tags.some(t => tags.has(t)))
+      : [];
+    const pool = personalizedPool.length ? personalizedPool : category.messages;
+    const isTailored = pool === personalizedPool;
+
     let index;
     do {
-      index = Math.floor(Math.random() * category.messages.length);
-    } while (index === lastIndexByCategory[categoryKey] && category.messages.length > 1);
+      index = Math.floor(Math.random() * pool.length);
+    } while (index === lastIndexByCategory[categoryKey] && pool.length > 1);
     lastIndexByCategory[categoryKey] = index;
 
     const emoji = category.emojis[Math.floor(Math.random() * category.emojis.length)];
+    const messageText = pool[index].text;
+    currentMessageText = messageText;
 
     display.classList.remove("show");
     setTimeout(() => {
-      display.innerHTML = `<span class="emoji">${emoji}</span>${category.messages[index]}`;
+      display.innerHTML = `<span class="emoji">${emoji}</span>${messageText}`;
       display.classList.add("show");
+      personalizedNote.hidden = !isTailored;
+      shareBtn.hidden = false;
     }, 150);
   }
 
   document.getElementById("everydayBtn").addEventListener("click", () => showMessage("everyday"));
   document.getElementById("motivationalBtn").addEventListener("click", () => showMessage("motivational"));
   document.getElementById("challengeBtn").addEventListener("click", () => showMessage("challenge"));
+  document.getElementById("spiritualBtn").addEventListener("click", () => showMessage("spiritual"));
+
+  // ---------- Share ----------
+
+  shareBtn.addEventListener("click", async () => {
+    if (!currentMessageText) return;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ text: currentMessageText, title: "Compliment Generator" });
+      } catch (e) {
+        // user cancelled or share failed — no action needed
+      }
+      return;
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(currentMessageText);
+        showToast("Copied to clipboard!");
+        return;
+      } catch (e) {
+        // fall through to legacy fallback
+      }
+    }
+
+    const temp = document.createElement("textarea");
+    temp.value = currentMessageText;
+    temp.style.position = "fixed";
+    temp.style.opacity = "0";
+    document.body.appendChild(temp);
+    temp.select();
+    try {
+      document.execCommand("copy");
+      showToast("Copied to clipboard!");
+    } catch (e) {
+      showToast("Couldn't share automatically — copy it manually.");
+    }
+    document.body.removeChild(temp);
+  });
 </script>
 </body>
 </html>
